@@ -56,9 +56,9 @@ public abstract class NotificationSenderService : INotificationSender
             datetime = DateTime.Now
         };
 
-        var n = notificationRepo.Create(notification);
+        Notification createdNotification = notificationRepo.Create(notification);
         Console.WriteLine("---------------------------------------------");
         Console.WriteLine("Notification Saved in Database along with Join Query");
-        Console.WriteLine(n);
+        Console.WriteLine(createdNotification);
     }
 }

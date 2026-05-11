@@ -45,7 +45,7 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
     public User? DeleteUserByEmail(string email)
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
-        string query = $"DELETE From User WHERE Email = {email} RETURNING *";
+        string query = $"DELETE From User WHERE Email = '{email}' RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
 
@@ -77,7 +77,7 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
 
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"DELETE FROM Users WHERE Email = {email} RETURNING *";
+        string query = $"DELETE FROM Users WHERE Email = '{email}' RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
 
@@ -123,7 +123,7 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
 
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"DELETE FROM Users WHERE PhoneNumber = {PhoneNumber} RETURNING *";
+        string query = $"DELETE FROM Users WHERE PhoneNumber = '{PhoneNumber}' RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
 
@@ -161,6 +161,6 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
         return null;
         */
 
-        return null!;
+        return list;
     }
 }

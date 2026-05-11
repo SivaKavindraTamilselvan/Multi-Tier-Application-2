@@ -23,7 +23,7 @@ public partial class UserService : IUserService
         return null;
     }
 
-    public List<User>? DeleteUserByPhoneNumber(string phonenumber)
+    public List<User> DeleteUserByPhoneNumber(string phonenumber)
     {
         var userList = userRepo.DeleteByPhoneNumber(phonenumber);
         //if no user is registered
