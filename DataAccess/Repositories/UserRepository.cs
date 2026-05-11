@@ -10,16 +10,22 @@ public class UserRepository : AbstractRepository<int,User>
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
         user.userId = ++userId;
-        string query = $"INSERT INTO Users(userId,Name,PhoneNumber,Email) VALUES({user.userId},'{user.Name}','{user.PhoneNumber}','{user.Email}')";
+        string query = $"INSERT INTO Users(Name,PhoneNumber,Email) VALUES('{user.Name}','{user.PhoneNumber}','{user.Email}') RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query,connection);
         try
         {
             connection.Open();
-            int result = command.ExecuteNonQuery();
-            if(result > 0)
+            NpgsqlDataReader reader = command.ExecuteReader();
+            if(reader.Read())
             {
+                User createdUser = new User();
+                createdUser.userId =Convert.ToInt32(reader["userId"]);
+                createdUser.Email = reader["Email"].ToString() ?? "";
+                createdUser.PhoneNumber = reader["PhoneNumber"].ToString() ?? "";
+                createdUser.Name = reader["Name"].ToString() ?? "";
                 Console.WriteLine("User created Successfully");
+                return createdUser;
             }
         }
         catch(Exception ex)
