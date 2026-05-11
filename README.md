@@ -55,13 +55,13 @@ Folder Structure
     
     - INotificationRepository (additional notification functions)
     - IRepository (common functions for all repos)
-    - No IUser created as for now no additional functions are needed
+    - IUserRepository (additional users functions)
 
 - Repositories
 
     - AbstractRepository (implement IRepository where common functions are defined)
     - NotificationRepository (create function and other additional function such as userId,service filteration are added for particular repo)
-    - UserRepository (create function)
+    - UserRepository (create function and other additional function such as deleteuserbyemail,deleteuserbyphone)
 Repositories are created
 
 Interface created for the Repository (Basic CRUD Operations)
@@ -99,9 +99,11 @@ The Repositories that are created
 User Repository
 
 - create function created
-- static variable createad for userId
-- userId will be increased for each user addition
+- delete user by email & phone number
+- connected to backend
 - all the attributes are validated in the presentation and buisness layer itself
+- DeleteByPhoneNumber(string PhoneNumber)
+- DeleteByEmail(string email)
 
 Notification Repository
 
@@ -114,6 +116,7 @@ All these returns the List here these are additional functions that are added on
 These repository are found in the INotificationRepository
 
 **Notification Repository implements both the IRepository and the INotificationRepository** 
+**User Repository implements both the IRepository and the IUserRepository** 
 
 ## Buisness Layer Library
 
@@ -122,7 +125,6 @@ Folder Structure
 - Delegates
 
     - AddUserDelegate
-    - DeleteUserDelegate
     - UpdationUserDelegate
     - NotificationDelegate
 
@@ -162,7 +164,6 @@ Folder Structure
         - DelegateService
 
             - UserAddService.cs
-            - UserDeleteService.cs
             - UserUpdateService.cs
 
         - MainService
@@ -170,6 +171,7 @@ Folder Structure
             - UserServiceByEmail.cs
             - UserServiceById.cs
             - UserServiceByPhone.cs
+            - UserDeleteService.cs
 
         - UserServiceMain.cs
 
@@ -189,10 +191,6 @@ Note - Parameters and return type should be same for the all the functions used 
 - AddUserDelegate
 
     - Here delegation is used adding the user and then send the notification via the SMS and Email
-
-- DeleteUserDelegate
-
-    - Here delegation is used deleting the user and then send the notification via the SMS and Email
 
 - UpdationUserDelegate
 
@@ -257,7 +255,6 @@ Used to check if the inputs are entered correctly or not.If not again loop will 
     - DelegateService
 
         - UserAddService.cs
-        - UserDeleteService.cs
         - UserUpdateService.cs
         
     - Main Service
@@ -404,8 +401,6 @@ DisplayTheNotification
     - if notification list is empty an exception is thrown NotificationNotFoundExcpetion which is custom created
 
 Delete User
-
-- Usage of delegates for deleting the user to the Dictionary and send notificaiton (both sms and email)
 
 - DeleteUserById
 
