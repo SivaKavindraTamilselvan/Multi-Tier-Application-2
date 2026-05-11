@@ -1,5 +1,16 @@
 ## MULTI TIER NOTIFICATION APPLICATION
 
+## ADDITIONAL FEATURES ADDED
+
+- Added the database connection
+- Join Query implemented to fetch the user details and notification details
+- Deleting of the user will not delete the notification history
+- Delete the user by phone number,email,id are implemented in the SQL query in data access layer
+- This is implemnetd because fetching all user data and deleting will be time consuming
+- These are the updated made
+- Notification print also the update are made
+- Addition of IUserRepo
+
 ## STEPS
 
 1. Create Model class Library
@@ -613,3 +624,19 @@ All the Needed object such as the service,repo are created in presentation layer
 - user login
 - display the notification by sms service
 - similarly can be applied for the email
+
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/891c2ea7-c423-496e-a05f-0c66c2965917" />
+
+- user table in database
+- included the user details
+
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/07eee9cc-e68d-4240-8633-ebdab9047feb" />
+
+- notification table in db
+- even user deleted the history will be there
+- to know about the user userEmail included
+- In the notification model in code userName and userPhoneNumber will be included where they are fetched by join queries
+
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/e6b103ef-26fd-4138-bbb6-548e3bbd3334" />
+
+- additional feature is join query usage for fetching the complete details
