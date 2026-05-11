@@ -57,6 +57,8 @@ public abstract class NotificationSenderService : INotificationSender
         };
 
         var n = notificationRepo.Create(notification);
+        Console.WriteLine("---------------------------------------------");
+        Console.WriteLine("Notification Saved in Database along with Join Query");
         Console.WriteLine(n);
     }
 }
