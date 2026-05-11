@@ -49,6 +49,7 @@ public abstract class NotificationSenderService : INotificationSender
         Notification notification = new Notification
         {
             userId = user.userId,
+            userEmail = user.Email ?? "",
             message = message,
             service = service,
             status = status,

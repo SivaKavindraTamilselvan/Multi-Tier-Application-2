@@ -73,8 +73,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
                 }
                 list.Add(item);
             }
-
-
         }
         catch (Exception ex)
         {
