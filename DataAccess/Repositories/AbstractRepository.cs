@@ -20,6 +20,12 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         {
 
             string query = $"SELECT * FROM {tableName + "s"} Where {id} = {key}";
+
+
+            if (tableName == "Notification")
+            {
+                query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId";
+            }
             NpgsqlCommand command = new NpgsqlCommand(query, connection);
 
             connection.Open();
@@ -58,6 +64,10 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         try
         {
             string query = $"SELECT * FROM {tableName + "s"}";
+            if (tableName == "Notification")
+            {
+                query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId";
+            }
             NpgsqlCommand command = new NpgsqlCommand(query, connection);
             connection.Open();
 
@@ -73,6 +83,8 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
                 }
                 list.Add(item);
             }
+
+
         }
         catch (Exception ex)
         {
@@ -111,9 +123,9 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
             if (reader.Read())
             {
                 T updatedItem = new T();
-                foreach(var prop in typeof(T).GetProperties())
+                foreach (var prop in typeof(T).GetProperties())
                 {
-                    prop.SetValue(updatedItem,reader[prop.Name]);
+                    prop.SetValue(updatedItem, reader[prop.Name]);
                 }
                 Console.WriteLine("User Updated Successfully");
                 return updatedItem;
@@ -155,12 +167,12 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         {
             connection.Open();
             int result = command.ExecuteNonQuery();
-            if(result > 0)
+            if (result > 0)
             {
                 Console.WriteLine("User Deleted Successfully");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -179,6 +191,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         return null;
         */
 
-        return null;
+        return null!;
     }
 }

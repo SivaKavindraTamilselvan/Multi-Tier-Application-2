@@ -56,6 +56,7 @@ public abstract class NotificationSenderService : INotificationSender
             datetime = DateTime.Now
         };
 
-        notificationRepo.Create(notification);
+        var n = notificationRepo.Create(notification);
+        Console.WriteLine(n);
     }
 }

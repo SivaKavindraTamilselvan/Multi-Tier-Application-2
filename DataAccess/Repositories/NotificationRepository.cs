@@ -21,16 +21,9 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
             NpgsqlDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
-                Notification notification = new Notification();
-                notification.message = reader["message"].ToString() ?? "";
-                notification.datetime = reader["datetime"] as DateTime?;
-                notification.notificationId = Convert.ToInt32(reader["notificationId"]);
-                notification.userId = Convert.ToInt32(reader["userId"]);
-                notification.userEmail = reader["userEmail"].ToString() ?? "";
-                notification.service = reader["service"].ToString() ?? "";
-                notification.status = reader["status"].ToString() ?? "";
-                Console.WriteLine("Notification created Successfully");
-                return notification;
+                int id = Convert.ToInt32(reader["notificationId"]);
+                Notification? notification = Get(id);
+                return notification!;
             }
         }
         catch (Exception ex)
@@ -54,7 +47,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"SELECT * FROM Notifications WHERE userId = {userId}";
+        string query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId WHERE n.userId = {userId}";
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
         List<Notification> notifications = new List<Notification>();
 
@@ -70,6 +63,8 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
                 notification.notificationId = Convert.ToInt32(reader["notificationId"]);
                 notification.userId = Convert.ToInt32(reader["userId"]);
                 notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.PhoneNumber = reader["PhoneNumber"].ToString() ?? "";
+                notification.Name = reader["Name"].ToString() ?? "";
                 notification.service = reader["service"].ToString() ?? "";
                 notification.status = reader["status"].ToString() ?? "";
                 notifications.Add(notification);
@@ -92,7 +87,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"SELECT * FROM Notifications WHERE userId = {userId} AND service = '{service}'";
+        string query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId WHERE userId = {userId} AND service = '{service}'";
 
         NpgsqlCommand command = new NpgsqlCommand(query,connection);
         List<Notification> notifications = new List<Notification>();
@@ -109,6 +104,8 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
                 notification.notificationId = Convert.ToInt32(reader["notificationId"]);
                 notification.userId = Convert.ToInt32(reader["userId"]);
                 notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.PhoneNumber = reader["PhoneNumber"].ToString() ?? "";
+                notification.Name = reader["Name"].ToString() ?? "";
                 notification.service = reader["service"].ToString() ?? "";
                 notification.status = reader["status"].ToString() ?? "";
                 notifications.Add(notification);
@@ -132,7 +129,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"SELECT * FROM Notifications WHERE service = '{service}'";
+        string query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId WHERE service = '{service}'";
 
         NpgsqlCommand command = new NpgsqlCommand(query,connection);
         List<Notification> notifications = new List<Notification>();
@@ -149,6 +146,8 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
                 notification.notificationId = Convert.ToInt32(reader["notificationId"]);
                 notification.userId = Convert.ToInt32(reader["userId"]);
                 notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.PhoneNumber = reader["PhoneNumber"].ToString() ?? "";
+                notification.Name = reader["Name"].ToString() ?? "";
                 notification.service = reader["service"].ToString() ?? "";
                 notification.status = reader["status"].ToString() ?? "";
                 notifications.Add(notification);
