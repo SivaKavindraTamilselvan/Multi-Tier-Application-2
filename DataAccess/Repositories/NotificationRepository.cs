@@ -22,7 +22,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
             {
                 int id = Convert.ToInt32(reader["notificationId"]);
                 Notification? notification = Get(id);
-                return notification!;
+                return notification;
             }
         }
         catch (Exception ex)
