@@ -13,6 +13,7 @@ public class UserRepository : AbstractRepository<int,User>
         string query = $"INSERT INTO Users(Name,PhoneNumber,Email) VALUES('{user.Name}','{user.PhoneNumber}','{user.Email}') RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query,connection);
+
         try
         {
             connection.Open();
@@ -37,7 +38,7 @@ public class UserRepository : AbstractRepository<int,User>
             connection.Close();
         }
         
-        items.Add(userId,user);
-        return user;
+        //items.Add(userId,user);
+        return null!;
     }
 }

@@ -5,7 +5,7 @@ namespace NotificationAppDataAccessLibrary.Repositories;
 
 public class NotificationRepository : AbstractRepository<int, Notification>, INotificationRepository
 {
-    static int notificationId = 0;
+    //static int notificationId = 0;
     public override Notification Create(Notification item)
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
@@ -42,15 +42,51 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
             connection.Close();
         }
 
+        return null!;
+        /*
         //return notifiction class
         item.notificationId = ++notificationId;
         items.Add(notificationId, item);
         return item;
+        */
     }
     public List<Notification> GetNotificationByUserId(int userId)
     {
+        NpgsqlConnection connection = dataConnection.GetConnection();
+
+        string query = $"SELECT * FROM Notifications WHERE userId = {userId}";
+        NpgsqlCommand command = new NpgsqlCommand(query, connection);
+        List<Notification> notifications = new List<Notification>();
+
+        try
+        {
+            connection.Open();
+            NpgsqlDataReader reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                Notification notification = new Notification();
+                notification.message = reader["message"].ToString() ?? "";
+                notification.datetime = reader["datetime"] as DateTime?;
+                notification.notificationId = Convert.ToInt32(reader["notificationId"]);
+                notification.userId = Convert.ToInt32(reader["userId"]);
+                notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.service = reader["service"].ToString() ?? "";
+                notification.status = reader["status"].ToString() ?? "";
+                notifications.Add(notification);
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+        return notifications;
         //return empty list
-        return items.Values.Where(x => x.userId == userId).ToList();
+        //return items.Values.Where(x => x.userId == userId).ToList();
     }
     public List<Notification> GetNotificationsByUserIdAndService(int userId, string service)
     {
