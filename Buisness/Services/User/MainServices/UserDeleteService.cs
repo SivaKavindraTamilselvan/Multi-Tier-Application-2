@@ -1,7 +1,5 @@
 using NotificationAppModelLibrary;
 using NotificationAppBuisnessLayerLibrary.Interfaces;
-using NotificationAppBuisnessLayerLibrary.Delegates;
-using NotificationAppModelLibrary.Exceptions;
 
 
 namespace NotificationAppBuisnessLayerLibrary.Services;

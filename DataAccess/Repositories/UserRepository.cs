@@ -44,39 +44,6 @@ public class UserRepository : AbstractRepository<int, User>, IUserRepository
         return null!;
     }
 
-    public User? DeleteUserByEmail(string email)
-    {
-        //connection is created
-        NpgsqlConnection connection = dataConnection.GetConnection();
-        //delete query created
-        string query = $"DELETE From User WHERE Email = '{email}' RETURNING *";
-        //command is created
-        NpgsqlCommand command = new NpgsqlCommand(query, connection);
-
-        try
-        {
-            //connection is opened
-            connection.Open();
-            int result = command.ExecuteNonQuery();
-            //if deleted then returns a user
-            if (result > 0)
-            {
-                Console.WriteLine("User Deleted Successfully");
-            }
-        }
-        //catch any of the exception including the sql query failures
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        //close the connection
-        finally
-        {
-            connection.Close();
-        }
-        return null;
-    }
-
     public User? DeleteByEmail(string email)
     {
         //connection is created
