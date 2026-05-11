@@ -5,7 +5,6 @@ namespace NotificationAppDataAccessLibrary.Repositories;
 
 public class NotificationRepository : AbstractRepository<int, Notification>, INotificationRepository
 {
-    //static int notificationId = 0;
     public override Notification Create(Notification item)
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
