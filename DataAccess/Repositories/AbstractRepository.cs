@@ -96,22 +96,29 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         string id = tableName.ToLower() + "Id";
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"UPDATE {tableName + "s"} SET";
+        string query = $"UPDATE {tableName + "s"} SET ";
         string set = "";
         foreach (var prop in typeof(T).GetProperties())
         {
-            set = set + $"{prop.Name} = {prop.GetValue(item)}";
+            set = set + $"{prop.Name} = '{prop.GetValue(item)}' ,";
         }
-        query = query + set + $"WHERE {id} = {key}";
+        set = set.TrimEnd(',');
+        query = query + set + $"WHERE {id} = {key} RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
         try
         {
             connection.Open();
-            int result = command.ExecuteNonQuery();
-            if (result > 0)
+            NpgsqlDataReader reader = command.ExecuteReader();
+            if (reader.Read())
             {
+                T updatedItem = new T();
+                foreach(var prop in typeof(T).GetProperties())
+                {
+                    prop.SetValue(updatedItem,reader[prop.Name]);
+                }
                 Console.WriteLine("User Updated Successfully");
+                return updatedItem;
             }
         }
         catch (Exception ex)
@@ -122,6 +129,7 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         {
             connection.Close();
         }
+        /*
         //return null
         if (!items.Any(x => x.Key.Equals(key)))
         {
@@ -130,6 +138,8 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
 
         items[key] = item;
         return item;
+        */
+        return null;
     }
 
     public T? Delete(K key)
