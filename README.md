@@ -14,6 +14,20 @@ Note - .env file found in the presentation layer which contains
 - Company PhoneNumber
 - Company Name
 - Email Password
+- ConnectionString
+
+## SQL
+
+- Add the connection string
+- Create the DBContext.cs
+- create connection
+- data access layer the modification are made and connected to the database
+- the query is added for each function
+- connection created
+- command created
+- execution made
+- the data are passed to the service
+- connection closed
 
 ## Model Library
 
