@@ -14,10 +14,11 @@ public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class
     {
         string tableName = typeof(T).Name;
         string id = tableName.ToLower() + "Id";
+        NpgsqlConnection connection = dataConnection.GetConnection();
 
         try
         {
-            NpgsqlConnection connection = dataConnection.GetConnection();
+            
             string query = $"SELECT * FROM {tableName+"s"} Where {id} = {key}";
             NpgsqlCommand command = new NpgsqlCommand(query,connection);
 
@@ -38,14 +39,55 @@ public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class
         {
             Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            connection.Close();
+        }
+
+        return null;
         //return null if not present
         //return items.Where(x=>x.Key.Equals(key)).Select(x=>x.Value).FirstOrDefault();
     }
 
     public List<T> GetAll()
     {
+        string tableName = typeof(T).Name;
+        NpgsqlConnection connection = dataConnection.GetConnection();
+        List<T> list = new List<T>();
+
+        try
+        {
+            string query = $"SELECT * FROM {tableName+"s"}";
+            NpgsqlCommand command = new NpgsqlCommand(query,connection);
+            connection.Open();
+
+            NpgsqlDataReader reader = command.ExecuteReader();
+
+            
+            while(reader.Read())
+            {
+                T item = new T();
+                foreach(var prop in typeof(T).GetProperties())
+                {
+                    prop.SetValue(item,reader[prop.Name]);
+                }
+                list.Add(item);
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+        return list;
         //return empty list
-        return items.Values.ToList();
+        //return items.Values.ToList();
     }
 
     public T? Update(K key,T item)
