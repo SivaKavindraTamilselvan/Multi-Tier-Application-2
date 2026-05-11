@@ -36,12 +36,6 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
         }
 
         return null!;
-        /*
-        //return notifiction class
-        item.notificationId = ++notificationId;
-        items.Add(notificationId, item);
-        return item;
-        */
     }
     public List<Notification> GetNotificationByUserId(int userId)
     {
@@ -55,7 +49,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
         {
             connection.Open();
             NpgsqlDataReader reader = command.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 Notification notification = new Notification();
                 notification.message = reader["message"].ToString() ?? "";
@@ -70,7 +64,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
                 notifications.Add(notification);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -80,8 +74,6 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
         }
 
         return notifications;
-        //return empty list
-        //return items.Values.Where(x => x.userId == userId).ToList();
     }
     public List<Notification> GetNotificationsByUserIdAndService(int userId, string service)
     {
@@ -89,14 +81,14 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
 
         string query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId WHERE userId = {userId} AND service = '{service}'";
 
-        NpgsqlCommand command = new NpgsqlCommand(query,connection);
+        NpgsqlCommand command = new NpgsqlCommand(query, connection);
         List<Notification> notifications = new List<Notification>();
 
         try
         {
             connection.Open();
             NpgsqlDataReader reader = command.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 Notification notification = new Notification();
                 notification.message = reader["message"].ToString() ?? "";
@@ -112,7 +104,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -122,8 +114,6 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
         }
 
         return notifications;
-        //return empty list
-        //return items.Values.Where(x => x.userId == userId && x.service == service).ToList();
     }
     public List<Notification> GetNotificationsByService(string service)
     {
@@ -131,14 +121,14 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
 
         string query = $"select n.notificationId,n.userId,u.Name,n.userEmail,u.PhoneNumber,n.message,n.service,n.status,n.datetime from Notifications n join Users u on u.userId = n.userId WHERE service = '{service}'";
 
-        NpgsqlCommand command = new NpgsqlCommand(query,connection);
+        NpgsqlCommand command = new NpgsqlCommand(query, connection);
         List<Notification> notifications = new List<Notification>();
 
         try
         {
             connection.Open();
             NpgsqlDataReader reader = command.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 Notification notification = new Notification();
                 notification.message = reader["message"].ToString() ?? "";
@@ -154,7 +144,7 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -164,8 +154,5 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
         }
 
         return notifications;
-
-        //return empty list
-        //return items.Values.Where(x => x.service == service).ToList();
     }
 }

@@ -2,14 +2,12 @@ using NotificationAppModelLibrary;
 using Npgsql;
 namespace NotificationAppDataAccessLibrary.Repositories;
 
-public class UserRepository : AbstractRepository<int, User>,IUserRepository
+public class UserRepository : AbstractRepository<int, User>, IUserRepository
 {
-    static int userId = 0;
     //override the create function
     public override User Create(User user)
     {
         NpgsqlConnection connection = dataConnection.GetConnection();
-        user.userId = ++userId;
         string query = $"INSERT INTO Users(Name,PhoneNumber,Email) VALUES('{user.Name}','{user.PhoneNumber}','{user.Email}') RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
@@ -37,8 +35,6 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
         {
             connection.Close();
         }
-
-        //items.Add(userId,user);
         return null!;
     }
 
@@ -66,9 +62,6 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
         {
             connection.Close();
         }
-
-        //items.Add(userId,user);
-
         return null;
     }
 
@@ -104,17 +97,6 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
         {
             connection.Close();
         }
-
-        /*
-        //return null
-        if (items.TryGetValue(key, out T? item))
-        {
-            items.Remove(key);
-            return item;
-        }
-        return null;
-        */
-
         return null!;
     }
     public List<User> DeleteByPhoneNumber(string PhoneNumber)
@@ -150,17 +132,6 @@ public class UserRepository : AbstractRepository<int, User>,IUserRepository
         {
             connection.Close();
         }
-
-        /*
-        //return null
-        if (items.TryGetValue(key, out T? item))
-        {
-            items.Remove(key);
-            return item;
-        }
-        return null;
-        */
-
         return list;
     }
 }

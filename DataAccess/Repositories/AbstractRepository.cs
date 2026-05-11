@@ -6,9 +6,7 @@ namespace NotificationAppDataAccessLibrary.Repositories;
 
 public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : class, new() where K : notnull
 {
-    protected Dictionary<K, T> items = new();
     public abstract T Create(T item);
-
     protected readonly DataConnection dataConnection = new();
     public T? Get(K key)
     {
@@ -51,8 +49,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         }
 
         return null;
-        //return null if not present
-        //return items.Where(x=>x.Key.Equals(key)).Select(x=>x.Value).FirstOrDefault();
     }
 
     public List<T> GetAll()
@@ -72,8 +68,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
             connection.Open();
 
             NpgsqlDataReader reader = command.ExecuteReader();
-
-
             while (reader.Read())
             {
                 T item = new T();
@@ -83,7 +77,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
                 }
                 list.Add(item);
             }
-
 
         }
         catch (Exception ex)
@@ -96,8 +89,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         }
 
         return list;
-        //return empty list
-        //return items.Values.ToList();
     }
 
     public T? Update(K key, T item)
@@ -139,16 +130,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         {
             connection.Close();
         }
-        /*
-        //return null
-        if (!items.Any(x => x.Key.Equals(key)))
-        {
-            return null;
-        }
-
-        items[key] = item;
-        return item;
-        */
         return null;
     }
 
@@ -186,17 +167,6 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         {
             connection.Close();
         }
-
-        /*
-        //return null
-        if (items.TryGetValue(key, out T? item))
-        {
-            items.Remove(key);
-            return item;
-        }
-        return null;
-        */
-
         return null!;
     }
 }
