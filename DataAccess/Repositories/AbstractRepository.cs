@@ -4,7 +4,7 @@ using Npgsql;
 
 namespace NotificationAppDataAccessLibrary.Repositories;
 
-public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class where K : notnull
+public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class,new() where K : notnull
 {
     protected Dictionary<K,T> items = new();
     public abstract T Create(T item);
@@ -12,8 +12,34 @@ public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class
     protected readonly DataConnection dataConnection = new();
     public T? Get(K key)
     {
+        string tableName = typeof(T).Name;
+        string id = tableName.ToLower() + "Id";
+
+        try
+        {
+            NpgsqlConnection connection = dataConnection.GetConnection();
+            string query = $"SELECT * FROM {tableName+"s"} Where {id} = {key}";
+            NpgsqlCommand command = new NpgsqlCommand(query,connection);
+
+            connection.Open();
+            NpgsqlDataReader reader = command.ExecuteReader();
+            
+            if(reader.Read())
+            {
+                T item = new T();
+                foreach(var prop in typeof(T).GetProperties())
+                {
+                    prop.SetValue(item,reader[prop.Name]);
+                }
+                return item;
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
         //return null if not present
-        return items.Where(x=>x.Key.Equals(key)).Select(x=>x.Value).FirstOrDefault();
+        //return items.Where(x=>x.Key.Equals(key)).Select(x=>x.Value).FirstOrDefault();
     }
 
     public List<T> GetAll()
