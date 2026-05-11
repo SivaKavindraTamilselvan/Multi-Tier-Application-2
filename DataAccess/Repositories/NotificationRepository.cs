@@ -90,12 +90,83 @@ public class NotificationRepository : AbstractRepository<int, Notification>, INo
     }
     public List<Notification> GetNotificationsByUserIdAndService(int userId, string service)
     {
+        NpgsqlConnection connection = dataConnection.GetConnection();
+
+        string query = $"SELECT * FROM Notifications WHERE userId = {userId} AND service = '{service}'";
+
+        NpgsqlCommand command = new NpgsqlCommand(query,connection);
+        List<Notification> notifications = new List<Notification>();
+
+        try
+        {
+            connection.Open();
+            NpgsqlDataReader reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                Notification notification = new Notification();
+                notification.message = reader["message"].ToString() ?? "";
+                notification.datetime = reader["datetime"] as DateTime?;
+                notification.notificationId = Convert.ToInt32(reader["notificationId"]);
+                notification.userId = Convert.ToInt32(reader["userId"]);
+                notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.service = reader["service"].ToString() ?? "";
+                notification.status = reader["status"].ToString() ?? "";
+                notifications.Add(notification);
+            }
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+        return notifications;
         //return empty list
-        return items.Values.Where(x => x.userId == userId && x.service == service).ToList();
+        //return items.Values.Where(x => x.userId == userId && x.service == service).ToList();
     }
     public List<Notification> GetNotificationsByService(string service)
     {
+        NpgsqlConnection connection = dataConnection.GetConnection();
+
+        string query = $"SELECT * FROM Notifications WHERE service = '{service}'";
+
+        NpgsqlCommand command = new NpgsqlCommand(query,connection);
+        List<Notification> notifications = new List<Notification>();
+
+        try
+        {
+            connection.Open();
+            NpgsqlDataReader reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                Notification notification = new Notification();
+                notification.message = reader["message"].ToString() ?? "";
+                notification.datetime = reader["datetime"] as DateTime?;
+                notification.notificationId = Convert.ToInt32(reader["notificationId"]);
+                notification.userId = Convert.ToInt32(reader["userId"]);
+                notification.userEmail = reader["userEmail"].ToString() ?? "";
+                notification.service = reader["service"].ToString() ?? "";
+                notification.status = reader["status"].ToString() ?? "";
+                notifications.Add(notification);
+            }
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+        return notifications;
+
         //return empty list
-        return items.Values.Where(x => x.service == service).ToList();
+        //return items.Values.Where(x => x.service == service).ToList();
     }
 }

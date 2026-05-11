@@ -31,17 +31,17 @@ public partial class UserRole
                 {
                     case 1:
                         {
-                            GetNotificationsByUserId();
+                            GetNotificationsByUserIdAndService("Email");
                             break;
                         }
                     case 2:
                         {
-                            GetNotificationsByUserIdAndService("Email");
+                            GetNotificationsByUserIdAndService("SMS");
                             break;
                         }
                     case 3:
                         {
-                            GetNotificationsByUserIdAndService("SMS");
+                            GetNotificationsByUserId();
                             break;
                         }
                     case 0:
