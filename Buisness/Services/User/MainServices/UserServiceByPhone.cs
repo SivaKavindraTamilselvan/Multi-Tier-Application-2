@@ -25,27 +25,16 @@ public partial class UserService : IUserService
 
     public List<User>? DeleteUserByPhoneNumber(string phonenumber)
     {
-        var UserList = userRepo.GetAll();
+        var userList = userRepo.DeleteByPhoneNumber(phonenumber);
         //if no user is registered
-        if(UserList == null)
+        if(userList == null)
         {
             throw new UserNotFoundException();
         }
-
-        var deletedList = new List<User>();
-        foreach (var item in UserList)
+        foreach(var user in userList)
         {
-            if (item.PhoneNumber == phonenumber)
-            {
-                deletedUser = item;
-                DeleteDelegate();
-                deletedList.Add(item);
-            }
+            SendDeleteNotification(user);
         }
-        if(deletedList.Count == 0)
-        {
-            return null;
-        }
-        return deletedList;
+        return userList;
     }
 }

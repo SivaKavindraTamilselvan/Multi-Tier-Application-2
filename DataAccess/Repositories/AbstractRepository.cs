@@ -159,17 +159,23 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
         string id = tableName.ToLower() + "Id";
         NpgsqlConnection connection = dataConnection.GetConnection();
 
-        string query = $"DELETE FROM {tableName + "s"} WHERE {id} = {key}";
+        string query = $"DELETE FROM {tableName + "s"} WHERE {id} = {key} RETURNING *";
 
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
 
         try
         {
             connection.Open();
-            int result = command.ExecuteNonQuery();
-            if (result > 0)
+            NpgsqlDataReader reader = command.ExecuteReader();
+
+            if (reader.Read())
             {
-                Console.WriteLine("User Deleted Successfully");
+                T item = new T();
+                foreach (var prop in typeof(T).GetProperties())
+                {
+                    prop.SetValue(item, reader[prop.Name]);
+                }
+                return item;
             }
         }
         catch (Exception ex)

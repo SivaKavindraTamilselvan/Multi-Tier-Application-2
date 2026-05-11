@@ -8,11 +8,11 @@ namespace NotificationAppBuisnessLayerLibrary.Services;
 
 public partial class UserService : IUserService
 {
-    private readonly IRepository<int, User> userRepo;
+    private readonly IUserRepository userRepo;
     private readonly INotificationSender emailService;
     private readonly INotificationSender smsService;
     InputsCheck inputsCheck = new InputsCheck();
-    public UserService(IRepository<int, User> repo,INotificationSender email,INotificationSender sms)
+    public UserService(IUserRepository repo,INotificationSender email,INotificationSender sms)
     {
         userRepo = repo;
         emailService = email;

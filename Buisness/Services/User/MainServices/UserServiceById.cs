@@ -16,14 +16,15 @@ public partial class UserService : IUserService
     }
     public User? DeleteUserById(int id)
     {
-        var user = userRepo.Get(id);
+        var user = userRepo.Delete(id);
         if(user == null)
         {
             throw new UserNotFoundException();
         }
-        deletedUser = user;
-        DeleteDelegate();
-        return deletedUser;
+        SendDeleteNotification(user);
+        //deletedUser = user;
+        //DeleteDelegate();
+        return user;
     }
     public User? UpdateUserById(int userId)
     {

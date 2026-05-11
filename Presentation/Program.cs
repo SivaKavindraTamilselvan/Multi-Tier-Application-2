@@ -12,7 +12,7 @@ internal class Program
     {
         Env.Load();
 
-        IRepository<int, User> userRepo = new UserRepository();
+        IUserRepository userRepo = new UserRepository();
         INotificationRepository notificationRepo = new NotificationRepository();
 
         INotificationSender email = new EmailService(notificationRepo);

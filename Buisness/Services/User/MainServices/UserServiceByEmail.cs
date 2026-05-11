@@ -23,20 +23,12 @@ public partial class UserService : IUserService
     }
     public User? DeleteUserByEmail(string email)
     {
-        var UserList = userRepo.GetAll();
-        if(UserList == null)
+        var user = userRepo.DeleteByEmail(email);
+        if(user == null)
         {
             throw new UserNotFoundException();
         }
-        foreach (var item in UserList)
-        {
-            if (item.Email == email)
-            {
-                deletedUser = item;
-                DeleteDelegate();
-                return deletedUser;
-            }
-        }
-        return null;
+        SendDeleteNotification(user);
+        return user;
     }
 }
