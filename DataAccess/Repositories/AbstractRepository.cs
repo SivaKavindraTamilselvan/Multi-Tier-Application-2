@@ -1,4 +1,7 @@
 using NotificationAppDataAccessLibrary.Interfaces;
+using NotificationAppDataAccessLibrary.DBContext;
+using Npgsql;
+
 namespace NotificationAppDataAccessLibrary.Repositories;
 
 public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class where K : notnull
@@ -6,6 +9,7 @@ public abstract class AbstractRepository<K,T> : IRepository<K,T> where T : class
     protected Dictionary<K,T> items = new();
     public abstract T Create(T item);
 
+    protected readonly DataConnection dataConnection = new();
     public T? Get(K key)
     {
         //return null if not present

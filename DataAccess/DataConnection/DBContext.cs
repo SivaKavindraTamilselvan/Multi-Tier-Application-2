@@ -1,5 +1,7 @@
 using Npgsql;
 
+namespace NotificationAppDataAccessLibrary.DBContext;
+
 public class DataConnection
 {
     private readonly string db_connection_string = Environment.GetEnvironmentVariable("ConnectionString") ?? string.Empty;
