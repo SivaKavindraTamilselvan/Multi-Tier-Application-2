@@ -144,12 +144,43 @@ public abstract class AbstractRepository<K, T> : IRepository<K, T> where T : cla
 
     public T? Delete(K key)
     {
+
+        string tableName = typeof(T).Name;
+        string id = tableName.ToLower() + "Id";
+        NpgsqlConnection connection = dataConnection.GetConnection();
+
+        string query = $"DELETE FROM {tableName + "s"} WHERE {id} = {key}";
+
+        NpgsqlCommand command = new NpgsqlCommand(query, connection);
+
+        try
+        {
+            connection.Open();
+            int result = command.ExecuteNonQuery();
+            if(result > 0)
+            {
+                Console.WriteLine("User Deleted Successfully");
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+        /*
         //return null
         if (items.TryGetValue(key, out T? item))
         {
             items.Remove(key);
             return item;
         }
+        return null;
+        */
+
         return null;
     }
 }
